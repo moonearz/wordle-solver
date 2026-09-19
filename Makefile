@@ -8,3 +8,6 @@ setup:
 
 check:
 	.venv/bin/prek run --all-files
+
+update-rankings:
+	.venv/bin/python3 scripts/update_rankings.py
