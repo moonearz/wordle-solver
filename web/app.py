@@ -4,8 +4,6 @@ from wordle_solver.solver import Solver
 
 app = Flask(__name__)
 
-solver = Solver()
-
 
 @app.route("/")
 def index():
@@ -15,9 +13,9 @@ def index():
 @app.route("/guess", methods=["POST"])
 def submit_guess():
     data = request.get_json()
+    history = data["history"]
 
-    guess = data["guess"].lower()
-    feedback = data["feedback"]
+    solver = Solver()
 
     feedback_map = {
         "absent": "x",
@@ -25,9 +23,11 @@ def submit_guess():
         "correct": "g",
     }
 
-    feedback_string = "".join(feedback_map[state] for state in feedback)
+    for turn in history:
+        guess = turn["guess"].lower()
+        feedback = "".join(feedback_map[state] for state in turn["feedback"])
 
-    solver.update(guess, feedback_string)
+        solver.update(guess, feedback)
 
     return jsonify(
         {

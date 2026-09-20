@@ -1,3 +1,4 @@
+const guessHistory = [];
 const tiles = document.querySelectorAll(".tile");
 setupTiles(tiles);
 const states = ["absent", "present", "correct"];
@@ -86,14 +87,18 @@ submitButton.addEventListener("click", async () => {
 		return;
 	}
 
+	guessHistory.push({
+		guess: guess,
+		feedback: feedback,
+	});
+
 	const response = await fetch("/guess", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
-			guess: guess,
-			feedback: feedback,
+			history: guessHistory,	
 		}),
 	});
 
