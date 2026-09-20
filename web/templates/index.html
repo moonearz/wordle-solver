@@ -15,15 +15,17 @@
 				<h1>Wordle Solver</h1>
 				<p>Enter the guess you played.</p>
 				<div class="guess-controls">
-					<div class="guess-row">
-						<input class="tile" maxlength="1" aria-label="Letter 1">
-						<input class="tile" maxlength="1" aria-label="Letter 2">
-						<input class="tile" maxlength="1" aria-label="Letter 3">
-						<input class="tile" maxlength="1" aria-label="Letter 4">
-						<input class="tile" maxlength="1" aria-label="Letter 5">
+					<div id="guess-board">
+						<div class="guess-row">
+							<input class="tile" maxlength="1" aria-label="Letter 1">
+							<input class="tile" maxlength="1" aria-label="Letter 2">
+							<input class="tile" maxlength="1" aria-label="Letter 3">
+							<input class="tile" maxlength="1" aria-label="Letter 4">
+							<input class="tile" maxlength="1" aria-label="Letter 5">
+							<button id="submit-guess" type="button" aria-label="Submit guess">→</button>
+						</div>
 					</div>
 
-					<button id="submit-guess" type="button" aria-label="Submit guess">→</button>
 				</div>
 
 				<p id="message"></p>
