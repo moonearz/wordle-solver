@@ -13,24 +13,49 @@
 		<body>
 			<main>
 				<h1>Wordle Solver</h1>
-				<p>Enter the guess you played.</p>
-				<div class="guess-controls">
-					<div id="guess-board">
-						<div class="guess-row">
-							<input class="tile" maxlength="1" aria-label="Letter 1">
-							<input class="tile" maxlength="1" aria-label="Letter 2">
-							<input class="tile" maxlength="1" aria-label="Letter 3">
-							<input class="tile" maxlength="1" aria-label="Letter 4">
-							<input class="tile" maxlength="1" aria-label="Letter 5">
-							<button id="submit-guess" type="button" aria-label="Submit guess">→</button>
+				<p>Enter guesses and feedback</p>
+				<div class="solver-layout">
+					<div class="game-section">
+						<div id="guess-board">
+							<div class="guess-row">
+								<input class="tile" maxlength="1" aria-label="Letter 1">
+								<input class="tile" maxlength="1" aria-label="Letter 2">
+								<input class="tile" maxlength="1" aria-label="Letter 3">
+								<input class="tile" maxlength="1" aria-label="Letter 4">
+								<input class="tile" maxlength="1" aria-label="Letter 5">
+
+								<button id="submit-guess" type="button" aria-label="Submit guess">
+									→
+								</button>
+							</div>
 						</div>
+
+						<p id="message"></p>
 					</div>
 
+					<div class="recommendations">
+						<section class="recommendation-panel">
+							<h2>Possible Answers</h2>
+							<div id="answer-guesses">
+								<p>Submit a guess to see recommendations.</p>
+							</div>
+						</section>
+
+						<section class="recommendation-panel">
+							<h2>Entropy Guesses</h2>
+							<div id="entropy-guesses">
+								<p>Submit a guess to see recommendations.</p>
+							</div>
+						</section>
+						<details id="remaining-answers">
+							<summary>
+								<span id="remaining-count">0</span> possible answers
+							</summary>
+
+							<div id="remaining-answer-list"></div>
+						</details>
+					</div>
 				</div>
-
-				<p id="message"></p>
-
-				<p id="message"></p>
 			</main>
 			<script src="{{ url_for('static', filename='script.js') }}"></script>
 		</body>

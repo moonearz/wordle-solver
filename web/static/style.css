@@ -7,14 +7,6 @@ main {
     margin-top: 50px;
 }
 
-.guess-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    margin-top: 30px;
-}
-
 .guess-row {
     display: flex;
     gap: 6px;
@@ -66,4 +58,36 @@ main {
     display: flex;
     flex-direction: column;
     gap: 6px;
+}
+
+.solver-layout {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 60px;
+    margin-top: 30px;
+}
+
+.game-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.recommendations {
+    display: flex;
+    gap: 20px;
+}
+
+.recommendation-panel {
+    width: 200px;
+    min-height: 300px;
+    padding: 16px;
+
+    border: 2px solid #888;
+}
+
+.recommendation-panel h2 {
+    margin-top: 0;
+    font-size: 18px;
 }
