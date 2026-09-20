@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Wordle Solver</title>
+		<link
+				rel="stylesheet"
+				href="{{ url_for('static', filename='style.css') }}"
+				>
+	</head>
+
+		<body>
+			<main>
+				<h1>Wordle Solver</h1>
+				<p>Enter the guess you played.</p>
+				<div class="guess-controls">
+					<div class="guess-row">
+						<input class="tile" maxlength="1" aria-label="Letter 1">
+						<input class="tile" maxlength="1" aria-label="Letter 2">
+						<input class="tile" maxlength="1" aria-label="Letter 3">
+						<input class="tile" maxlength="1" aria-label="Letter 4">
+						<input class="tile" maxlength="1" aria-label="Letter 5">
+					</div>
+
+					<button id="submit-guess" type="button" aria-label="Submit guess">→</button>
+				</div>
+
+				<p id="message"></p>
+
+				<p id="message"></p>
+			</main>
+			<script src="{{ url_for('static', filename='script.js') }}"></script>
+		</body>
+</html>
