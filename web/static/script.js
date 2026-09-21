@@ -103,12 +103,43 @@ submitButton.addEventListener("click", async () => {
 	});
 
 	const data = await response.json();
+	const answerGuesses = document.querySelector("#answer-guesses");
+	answerGuesses.innerHTML = "";
+	data.answer_guesses.forEach(([word, entropy]) => {
+		const item = document.createElement("p");
+		item.textContent = `${word.toUpperCase()} (${entropy.toFixed(2)})`;
+		answerGuesses.appendChild(item);
+	});
+	const entropyGuesses = document.querySelector("#entropy-guesses");
 
+	entropyGuesses.innerHTML = "";
+
+	data.entropy_guesses.forEach(([word, entropy]) => {
+		const item = document.createElement("p");
+		item.textContent = `${word.toUpperCase()} (${entropy.toFixed(2)})`;
+		entropyGuesses.appendChild(item);
+	});
+
+	const remainingSummary = document.querySelector("#remaining-summary");
+
+	if (data.using_fallback) {
+		remainingSummary.textContent =
+			`${data.remaining_answers.length} matches from full word list`;
+	} else {
+		remainingSummary.textContent =
+			`${data.remaining_answers.length} possible answers`;
+	}
+	const remainingAnswerList = document.querySelector(
+		"#remaining-answer-list"
+	);
+	remainingAnswerList.innerHTML = "";
+
+	data.remaining_answers.forEach((word) => {
+		const item = document.createElement("p");
+		item.textContent = word.toUpperCase();
+		remainingAnswerList.appendChild(item);
+	});
 	console.log("Server response:", data);
-
-	message.textContent =
-		`${data.remaining_answers} possible answers remain. ` +
-		`Recommended guess: ${data.best_guess.toUpperCase()}`;
 
 	tiles.forEach((tile) => {
 		tile.disabled = true;

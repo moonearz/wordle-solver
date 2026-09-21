@@ -46,6 +46,10 @@ class Solver:
             self.initial_rankings_answers = None
             self.initial_rankings_all = None
 
+    @classmethod
+    def from_all_words(cls):
+        return cls(possible_answers=list(set(answers + guesses)))
+
     @property
     def remaining_answers(self):
         return len(self.possible_answers)
@@ -114,21 +118,15 @@ class Solver:
         scores.sort(key=lambda x: x[1], reverse=True)
         return scores[:n]
 
+    def best_non_answers(self, n=10) -> list[tuple[str, float]]:
+        scores = []
 
-def best_non_answers(self, n=10) -> list[tuple[str, float]]:
-    scores = []
+        for guess in self.possible_guesses:
+            if guess in self.possible_answers:
+                continue
 
-    for guess in self.possible_guesses:
-        if guess in self.possible_answers:
-            continue
+            entropy = self.get_entropy(guess)
+            scores.append((guess, entropy))
 
-        entropy = self.get_entropy(guess)
-        scores.append((guess, entropy))
-
-    scores.sort(key=lambda x: x[1], reverse=True)
-    return scores[:n]
-
-
-@classmethod
-def from_all_words(cls):
-    return cls(possible_answers=list(set(answers + guesses)))
+        scores.sort(key=lambda x: x[1], reverse=True)
+        return scores[:n]

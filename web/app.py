@@ -46,7 +46,8 @@ def submit_guess():
     return jsonify(
         {
             "remaining_answers": solver.possible_answers,
-            "best_guess": solver.best_guess() if solver.possible_answers else None,
+            "answer_guesses": solver.best_possible_answers(10),
+            "entropy_guesses": solver.best_non_answers(10),
             "using_fallback": using_fallback,
         }
     )
