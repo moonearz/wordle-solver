@@ -27,8 +27,13 @@ def convert_feedback(feedback: list[TileColor]) -> str:
 
 
 class Solver:
-    def __init__(self, use_cache=True):
-        self.possible_answers = answers.copy()
+    def __init__(self, possible_answers=None, use_cache=True):
+        if possible_answers is None:
+            self.possible_answers = answers.copy()
+        else:
+            self.possible_answers = possible_answers.copy()
+            use_cache = False
+
         self.possible_guesses = list(set(guesses + answers))
         if use_cache:
             with (DATA_DIR / "initial_rankings_all.json").open() as f:
@@ -50,6 +55,9 @@ class Solver:
         return self.possible_answers
 
     def get_entropy(self, guess: str) -> float:
+        if not self.possible_answers:
+            return 0.0
+
         feedback_counter = Counter()
         for candidate in self.possible_answers:
             feedback = convert_feedback(get_feedback(guess, candidate))
@@ -105,3 +113,17 @@ class Solver:
 
         scores.sort(key=lambda x: x[1], reverse=True)
         return scores[:n]
+
+
+def best_non_answers(self, n=10) -> list[tuple[str, float]]:
+    scores = []
+
+    for guess in self.possible_guesses:
+        if guess in self.possible_answers:
+            continue
+
+        entropy = self.get_entropy(guess)
+        scores.append((guess, entropy))
+
+    scores.sort(key=lambda x: x[1], reverse=True)
+    return scores[:n]
