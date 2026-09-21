@@ -127,3 +127,8 @@ def best_non_answers(self, n=10) -> list[tuple[str, float]]:
 
     scores.sort(key=lambda x: x[1], reverse=True)
     return scores[:n]
+
+
+@classmethod
+def from_all_words(cls):
+    return cls(possible_answers=list(set(answers + guesses)))

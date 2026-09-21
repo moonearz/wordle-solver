@@ -15,13 +15,27 @@ def submit_guess():
     data = request.get_json()
     history = data["history"]
 
-    solver = Solver()
-
     feedback_map = {
         "absent": "x",
         "present": "y",
         "correct": "g",
     }
+
+    def apply_history(solver):
+        for turn in history:
+            guess = turn["guess"].lower()
+        feedback = "".join(feedback_map[state] for state in turn["feedback"])
+        solver.update(guess, feedback)
+
+    solver = Solver()
+    apply_history(solver)
+
+    using_fallback = False
+
+    if not solver.possible_answers:
+        solver = Solver.from_all_words()
+        apply_history(solver)
+        using_fallback = True
 
     for turn in history:
         guess = turn["guess"].lower()
@@ -31,7 +45,8 @@ def submit_guess():
 
     return jsonify(
         {
-            "remaining_answers": solver.remaining_answers,
-            "best_guess": solver.best_guess(),
+            "remaining_answers": solver.possible_answers,
+            "best_guess": solver.best_guess() if solver.possible_answers else None,
+            "using_fallback": using_fallback,
         }
     )
