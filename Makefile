@@ -1,13 +1,19 @@
-.PHONY: setup
+PROJECT := $(notdir $(CURDIR))
+VENV := $(HOME)/.venvs/$(PROJECT)
+
+PYTHON := $(VENV)/bin/python
+PIP := $(PYTHON) -m pip
+PREK := $(VENV)/bin/prek
+
+.PHONY: setup check update-rankings
 
 setup:
-	python3.13 -m venv .venv
-	.venv/bin/pip install -e ".[dev]"
-	.venv/bin/prek install
-
+	python3.13 -m venv $(VENV)
+	$(PIP) install -e ".[dev]"
+	$(PREK) install
 
 check:
-	.venv/bin/prek run --all-files
+	$(PREK) run --all-files
 
 update-rankings:
-	.venv/bin/python3 scripts/update_rankings.py
+	$(PYTHON) scripts/update_rankings.py
