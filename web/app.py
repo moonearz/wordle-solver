@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template, request
 
 from wordle_solver.solver import Solver
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="/wordle/static")
 
 
 @app.route("/")

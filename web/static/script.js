@@ -58,7 +58,7 @@ renderGuesses(initialData)
 setupTiles(tiles);
 
 async function getSolverData() {
-	const response = await fetch("/guess", {
+	const response = await fetch("/wordle/guess", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
