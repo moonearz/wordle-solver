@@ -35,3 +35,6 @@ select = [
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+
+[tool.setuptools.package-data]
+wordle_solver = ["data/*.json"]
