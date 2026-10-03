@@ -42,6 +42,9 @@ class Solver:
             with (DATA_DIR / "initial_rankings_answers.json").open() as f:
                 self.initial_rankings_answers = [tuple(x) for x in json.load(f)]
 
+            with (DATA_DIR / "initial_rankings_non_answers.json").open() as f:
+                self.initial_rankings_non_answers = [tuple(x) for x in json.load(f)]
+
         else:
             self.initial_rankings_answers = None
             self.initial_rankings_all = None
@@ -119,6 +122,9 @@ class Solver:
         return scores[:n]
 
     def best_non_answers(self, n=10) -> list[tuple[str, float]]:
+        if len(self.possible_answers) == len(answers) and self.initial_rankings_answers:
+            return self.initial_rankings_non_answers[:n]
+
         scores = []
 
         for guess in self.possible_guesses:

@@ -1,8 +1,33 @@
 const guessHistory = [];
 const tiles = document.querySelectorAll(".tile");
-setupTiles(tiles);
 const states = ["absent", "present", "correct"];
 const board = document.querySelector("#guess-board");
+const initialData = JSON.parse(
+    document.querySelector("#initial-data").textContent
+);
+
+function renderGuesses(data) {
+    const answerGuesses = document.querySelector("#answer-guesses");
+    answerGuesses.innerHTML = "";
+
+    data.answer_guesses.forEach(([word, entropy]) => {
+        const item = document.createElement("p");
+        item.textContent = `${word.toUpperCase()} (${entropy.toFixed(2)})`;
+        answerGuesses.appendChild(item);
+    });
+
+    const entropyGuesses = document.querySelector("#entropy-guesses");
+    entropyGuesses.innerHTML = "";
+
+    data.entropy_guesses.forEach(([word, entropy]) => {
+        const item = document.createElement("p");
+        item.textContent = `${word.toUpperCase()} (${entropy.toFixed(2)})`;
+        entropyGuesses.appendChild(item);
+    });
+}
+
+renderGuesses(initialData)
+setupTiles(tiles);
 
 function createGuessRow() {
 	const row = document.createElement("div");
@@ -98,27 +123,12 @@ submitButton.addEventListener("click", async () => {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify({
-			history: guessHistory,	
+			history: guessHistory,
 		}),
 	});
 
 	const data = await response.json();
-	const answerGuesses = document.querySelector("#answer-guesses");
-	answerGuesses.innerHTML = "";
-	data.answer_guesses.forEach(([word, entropy]) => {
-		const item = document.createElement("p");
-		item.textContent = `${word.toUpperCase()} (${entropy.toFixed(2)})`;
-		answerGuesses.appendChild(item);
-	});
-	const entropyGuesses = document.querySelector("#entropy-guesses");
-
-	entropyGuesses.innerHTML = "";
-
-	data.entropy_guesses.forEach(([word, entropy]) => {
-		const item = document.createElement("p");
-		item.textContent = `${word.toUpperCase()} (${entropy.toFixed(2)})`;
-		entropyGuesses.appendChild(item);
-	});
+	renderGuesses(data)
 
 	const remainingSummary = document.querySelector("#remaining-summary");
 

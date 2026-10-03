@@ -1,62 +1,68 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Wordle Solver</title>
-		<link
-				rel="stylesheet"
-				href="{{ url_for('static', filename='style.css') }}"
-				>
-	</head>
 
-		<body>
-			<main>
-				<h1>Wordle Solver</h1>
-				<p>Enter guesses and feedback</p>
-				<div class="solver-layout">
-					<div class="game-section">
-						<div id="guess-board">
-							<div class="guess-row">
-								<input class="tile" maxlength="1" aria-label="Letter 1">
-								<input class="tile" maxlength="1" aria-label="Letter 2">
-								<input class="tile" maxlength="1" aria-label="Letter 3">
-								<input class="tile" maxlength="1" aria-label="Letter 4">
-								<input class="tile" maxlength="1" aria-label="Letter 5">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Wordle Solver</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 
-								<button id="submit-guess" type="button" aria-label="Submit guess">
-									→
-								</button>
-							</div>
-						</div>
+<body>
+	<main>
+		<h1>Wordle Solver</h1>
+		<p>Enter guesses and feedback</p>
+		<div class="solver-layout">
+			<div class="game-section">
+				<div id="guess-board">
+					<div class="guess-row">
+						<input class="tile" maxlength="1" aria-label="Letter 1">
+						<input class="tile" maxlength="1" aria-label="Letter 2">
+						<input class="tile" maxlength="1" aria-label="Letter 3">
+						<input class="tile" maxlength="1" aria-label="Letter 4">
+						<input class="tile" maxlength="1" aria-label="Letter 5">
 
-						<p id="message"></p>
-					</div>
-
-					<div class="recommendations">
-						<section class="recommendation-panel">
-							<h2>Possible Answers</h2>
-							<div id="answer-guesses">
-								<p>Submit a guess to see recommendations.</p>
-							</div>
-						</section>
-
-						<section class="recommendation-panel">
-							<h2>Entropy Guesses</h2>
-							<div id="entropy-guesses">
-								<p>Submit a guess to see recommendations.</p>
-							</div>
-						</section>
-						<details id="remaining-answers">
-							<summary>
-								<span id="remaining-summary">0 possible answers</span>
-							</summary>
-
-							<div id="remaining-answer-list"></div>
-						</details>
+						<button id="submit-guess" type="button" aria-label="Submit guess">
+							→
+						</button>
 					</div>
 				</div>
-			</main>
-			<script src="{{ url_for('static', filename='script.js') }}"></script>
-		</body>
+
+				<p id="message"></p>
+			</div>
+
+			<div class="recommendations">
+				<section class="recommendation-panel">
+					<h2>Possible Answers</h2>
+					<div id="answer-guesses">
+						<p>Submit a guess to see recommendations.</p>
+					</div>
+				</section>
+
+				<section class="recommendation-panel">
+					<h2>Optimal Guesses</h2>
+					<div id="entropy-guesses">
+						<p>Submit a guess to see recommendations.</p>
+					</div>
+				</section>
+				<details id="remaining-answers">
+					<summary>
+						<span id="remaining-summary">0 possible answers</span>
+					</summary>
+
+					<div id="remaining-answer-list"></div>
+				</details>
+			</div>
+		</div>
+	</main>
+	<script id="initial-data" type="application/json">
+	{{ {
+		"answer_guesses": answer_guesses,
+		"entropy_guesses": entropy_guesses
+	} | tojson }}
+</script>
+
+	<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
 </html>

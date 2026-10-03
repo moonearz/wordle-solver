@@ -7,7 +7,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    solver = Solver()
+    return render_template(
+        "index.html",
+        answer_guesses=solver.best_possible_answers(10),
+        entropy_guesses=solver.best_non_answers(10),
+    )
 
 
 @app.route("/guess", methods=["POST"])
@@ -24,8 +29,8 @@ def submit_guess():
     def apply_history(solver):
         for turn in history:
             guess = turn["guess"].lower()
-        feedback = "".join(feedback_map[state] for state in turn["feedback"])
-        solver.update(guess, feedback)
+            feedback = "".join(feedback_map[state] for state in turn["feedback"])
+            solver.update(guess, feedback)
 
     solver = Solver()
     apply_history(solver)
