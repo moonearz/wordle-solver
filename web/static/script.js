@@ -26,8 +26,50 @@ function renderGuesses(data) {
     });
 }
 
+function renderRemainingAnswers(data) {
+	const remainingSummary = document.querySelector("#remaining-summary");
+	if (data.using_fallback) {
+		remainingSummary.textContent = `${data.remaining_answers.length} matches from full word list`;
+	} 
+	else {
+		remainingSummary.textContent = `${data.remaining_answers.length} possible answers`;
+	}
+	const remainingAnswerList = document.querySelector(
+		"#remaining-answer-list"
+	);
+	remainingAnswerList.innerHTML = "";
+
+	data.remaining_answers.forEach((word) => {
+		const item = document.createElement("p");
+		item.textContent = word.toUpperCase();
+		remainingAnswerList.appendChild(item);
+	});
+}
+
+function renderSolverData(data){ 
+	renderGuesses(data);
+	renderRemainingAnswers(data);
+
+	const fallbackBanner = document.querySelector("#fallback-banner");
+	fallbackBanner.hidden = !data.using_fallback;
+}
+
 renderGuesses(initialData)
 setupTiles(tiles);
+
+async function getSolverData() {
+	const response = await fetch("/guess", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({
+			history: guessHistory,
+		}),
+	});
+
+	return response.json();
+}
 
 function createGuessRow() {
 	const row = document.createElement("div");
@@ -48,6 +90,12 @@ function createGuessRow() {
 	return row;
 }
 
+function clearTile(tile) {
+	tile.value = "";
+	tile.classList.remove(...states);
+	delete tile.dataset.state;
+}
+
 function setupTiles(tiles) {
 	tiles.forEach((tile, index) => {
 		tile.addEventListener("input", () => {
@@ -59,12 +107,17 @@ function setupTiles(tiles) {
 		});
 
 		tile.addEventListener("keydown", (event) => {
-			if (
-				event.key === "Backspace" &&
-				tile.value === "" &&
-				index > 0
-			) {
-				tiles[index - 1].focus();
+			if (event.key === "Backspace") {
+				event.preventDefault();
+
+				if (tile.value) {
+					clearTile(tile);
+				} else if (index > 0) {
+					const previousTile = tiles[index - 1];
+					
+					clearTile(previousTile);
+					previousTile.focus();
+				}
 			}
 		});
 
@@ -112,44 +165,14 @@ submitButton.addEventListener("click", async () => {
 		return;
 	}
 
+	message.textContent = "";
 	guessHistory.push({
 		guess: guess,
 		feedback: feedback,
 	});
 
-	const response = await fetch("/guess", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			history: guessHistory,
-		}),
-	});
-
-	const data = await response.json();
-	renderGuesses(data)
-
-	const remainingSummary = document.querySelector("#remaining-summary");
-
-	if (data.using_fallback) {
-		remainingSummary.textContent =
-			`${data.remaining_answers.length} matches from full word list`;
-	} else {
-		remainingSummary.textContent =
-			`${data.remaining_answers.length} possible answers`;
-	}
-	const remainingAnswerList = document.querySelector(
-		"#remaining-answer-list"
-	);
-	remainingAnswerList.innerHTML = "";
-
-	data.remaining_answers.forEach((word) => {
-		const item = document.createElement("p");
-		item.textContent = word.toUpperCase();
-		remainingAnswerList.appendChild(item);
-	});
-	console.log("Server response:", data);
+	const data = await getSolverData();
+	renderSolverData(data)
 
 	tiles.forEach((tile) => {
 		tile.disabled = true;
@@ -163,4 +186,53 @@ submitButton.addEventListener("click", async () => {
 	board.appendChild(newRow);
 
 	newRow.querySelector(".tile").focus();
+});
+
+const resetButton = document.querySelector("#reset-game");
+
+resetButton.addEventListener("click", () => {
+	window.location.reload();
+});
+
+const undoButton = document.querySelector("#undo-guess");
+
+undoButton.addEventListener("click", async () => {
+	if (guessHistory.length === 0) {
+		return;
+	}
+
+	guessHistory.pop();
+
+	const emptyRow = board.lastElementChild;
+	emptyRow.remove();
+
+	const previousRow = board.lastElementChild;
+	const previousTiles = previousRow.querySelectorAll(".tile");
+
+	previousTiles.forEach((tile) => {
+		tile.disabled = false;
+	});
+
+	previousTiles[previousTiles.length - 1].focus();
+	previousRow.appendChild(submitButton);
+
+	message.textContent = "";
+
+	if (guessHistory.length === 0) {
+		renderGuesses(initialData);
+
+		const remainingAnswerList = document.querySelector(
+			"#remaining-answer-list"
+		);
+		remainingAnswerList.innerHTML = "";
+
+		const remainingSummary = document.querySelector("#remaining-summary");
+		remainingSummary.textContent = "many possible answers";
+
+		const fallbackBanner = document.querySelector("#fallback-banner");
+		fallbackBanner.hidden = true;
+	} else {
+		const data = await getSolverData();
+		renderSolverData(data);
+	}
 });

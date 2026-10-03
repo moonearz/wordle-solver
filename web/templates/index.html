@@ -11,7 +11,18 @@
 <body>
 	<main>
 		<h1>Wordle Solver</h1>
-		<p>Enter guesses and feedback</p>
+		<div>
+			<p>Enter guesses and feedback</p>
+			<p>Change a tile's color with a click</p>
+		</div>
+		<div id="fallback-banner" hidden>
+			No known Wordle answers match this feedback.
+			Showing matches from the full word list.
+		</div>
+		<div class="controls">
+			<button id="undo-guess" type="button">Undo</button>
+			<button id="reset-game" type="button">Reset</button>
+		</div>
 		<div class="solver-layout">
 			<div class="game-section">
 				<div id="guess-board">
@@ -47,7 +58,7 @@
 				</section>
 				<details id="remaining-answers">
 					<summary>
-						<span id="remaining-summary">0 possible answers</span>
+						<span id="remaining-summary">many possible answers</span>
 					</summary>
 
 					<div id="remaining-answer-list"></div>
