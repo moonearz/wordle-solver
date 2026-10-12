@@ -148,4 +148,74 @@ main {
         align-items: center;
         gap: 30px;
     }
+
+    .recommendations {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
+        max-width: 390px;
+    }
+
+    .recommendation-panel {
+        width: auto;
+        min-width: 0;
+        min-height: 0;
+        padding: 10px;
+    }   
+
+    .recommendation-panel h2 {
+        font-size: 16px;
+    }
+
+    #remaining-answers {
+        grid-column: 1 / -1;
+    }
+
+    .tile {
+        box-sizing: border-box;
+        width: clamp(35px, 11vw, 50px);
+        height: clamp(35px, 11vw, 50px);
+        font-size: clamp(20px, 6vw, 28px);
+        padding: 0;
+    }
+
+    #submit-guess {
+        box-sizing: border-box;
+        width: clamp(35px, 11vw, 50px);
+        height: clamp(35px, 11vw, 50px);
+        font-size: clamp(20px, 6vw, 28px);
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .guess-row {
+        gap: 5px;
+    }
+
+    main {
+        margin-top: 15px;
+    }
+
+    h1 {
+        margin: 0 0 12px;
+        font-size: 1.75rem;
+    }
+
+    main > div:nth-child(2) p {
+        margin: 4px 0;
+        font-size: 0.9rem;
+    }
+
+    .controls {
+        margin-top: 12px;
+    }
+
+    .solver-layout {
+        margin-top: 15px;
+        gap: 20px;
+    }
 }
